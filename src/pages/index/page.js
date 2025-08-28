@@ -38,9 +38,9 @@ export default function AutoMecanica() {
               <Link href="/restrictArea/login/page" className={style.menuItem}>Área Restrita</Link>
 
             </nav>
-            <button className={`${style.btnOrcamento} ${style.pulseOrange}`}>
+            <Link href={"https://api.whatsapp.com/message/J4NEQ5STKZW3B1?autoload=1&app_absent=0"}><button className={`${style.btnOrcamento} ${style.pulseOrange}`}>
               Solicitar Orçamento
-            </button>
+            </button></Link>
           </div>
         </div>
       </header>
@@ -72,6 +72,18 @@ export default function AutoMecanica() {
             <h4>Freios</h4>
             <p>Inspeção e substituição de pastilhas, discos e fluídos.</p>
           </div>
+          <div className={style.serviceCard}>
+            <h4>Serviço Suspensão</h4>
+            <p>Inspeção e substituição da Suspensão.</p>
+          </div>
+          <div className={style.serviceCard}>
+            <h4>Troca de Pneu Geral</h4>
+            <p>Troca de pneus.</p>
+          </div>
+          <div className={style.serviceCard}>
+            <h4>Torno Mecânico</h4>
+            <p>Todos os serviços envolvendo o torno.</p>
+          </div>
         </div>
       </section>
 
@@ -85,6 +97,69 @@ export default function AutoMecanica() {
           <button type="submit">Enviar</button>
         </form>
       </section>
+      <footer className={style.footer}>
+      <div className={style.container}>
+        <div className={style.grid}>
+          {/* Logo + descrição */}
+          <div>
+            <div className={style.logoBox}>
+              <div className={style.logoIcon}>
+                <svg
+                  className={style.svgIcon}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 2L3 7v11a1 1 0 001 1h3v-7h6v7h3a1 1 0 001-1V7l-7-5z" />
+                </svg>
+              </div>
+              <h3 className={style.logoText}>AutoMecânicaLeôncio</h3>
+            </div>
+            <p className={style.description}>
+              Sua oficina de confiança há mais de 15 anos. Qualidade, agilidade
+              e preço justo.
+            </p>
+          </div>
+
+          {/* Serviços */}
+          <div>
+            <h4 className={style.title}>Serviços</h4>
+            <ul className={style.list}>
+              <li><a href="#">Manutenção Preventiva</a></li>
+              <li><a href="#">Mecânica Geral</a></li>
+              <li><a href="#">Diagnóstico</a></li>
+              <li><a href="#">Ar Condicionado</a></li>
+            </ul>
+          </div>
+
+          {/* Contato */}
+          <div>
+            <h4 className={style.title}>Contato</h4>
+            <ul className={style.list}>
+              <li>(83) 99343-2434</li>
+              <li>automecanicaleoncio@gmail.com</li>
+              <li>Rua Manoel Eucrácio de Lira</li>
+              <li>Centro - Esperança PB</li>
+            </ul>
+          </div>
+
+          {/* Redes Sociais */}
+          <div>
+            <h4 className={style.title}>Redes Sociais</h4>
+            <div className={style.social}>
+              <a href="#">📘</a>
+              <a href="https://www.instagram.com/leoncioautomecanica/">📷</a>
+              <a href="https://api.whatsapp.com/message/J4NEQ5STKZW3B1?autoload=1&app_absent=0">📞</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Rodapé final */}
+        <div className={style.copy}>
+          <p>&copy; 2018 AutoMecânicaLeôncio. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
     </div>
+    
   );
 }

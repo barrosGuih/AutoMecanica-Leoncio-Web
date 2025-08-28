@@ -10,6 +10,10 @@ export default function Dashboard() {
     { id: 3, descricao: "Manutenção Equipamentos", valor: 800.0, vencimento: "2024-01-20", status: "pendente", categoria: "Manutenção" },
   ]);
 
+  const [itensAdquiridos, setItensAdquiridos] = useState([
+    { id: 1, item: "Pneu 175/70 R13", quantidade: 10, Fornecedor: "SpeedMax", precoUnitario: 280, precoGeral: 2800},
+  ]);
+
   const [itensDistribuidos, setItensDistribuidos] = useState([
     { id: 1, item: "Óleo Motor 15W40", quantidade: 50, departamento: "Secretaria de Obras", data: "2024-01-08", responsavel: "João Silva" },
     { id: 2, item: "Filtro de Ar", quantidade: 25, departamento: "Secretaria de Transporte", data: "2024-01-07", responsavel: "Maria Santos" },
@@ -17,7 +21,8 @@ export default function Dashboard() {
   ]);
 
   const [novaConta, setNovaConta] = useState({ descricao: "", valor: "", vencimento: "", categoria: "Peças" });
-  const [novoItem, setNovoItem] = useState({ item: "", quantidade: "", departamento: "", responsavel: "" });
+  const [novoItem, setNovoItem] = useState({ item: "", quantidade: "", departamento: "", responsavel: "", placa: ""});
+  const [novoItemAdquirido, setNovoItemAdquirido] = useState([{ item: "Pneu 175/70 R13", quantidade: 10, Fornecedor: "SpeedMax", precoUnitario: 280, precoGeral: 2800},]);
 
   const adicionarConta = () => {
     if (novaConta.descricao && novaConta.valor && novaConta.vencimento) {
@@ -27,11 +32,20 @@ export default function Dashboard() {
     }
   };
 
+  const adicionarItemAdquirido = () =>{
+    if(novoItemAdquirido.item && novoItemAdquirido.quantidade && novoItemAdquirido.Fornecedor && novoItemAdquirido.precoUnitario && novoItemAdquirido.precoGeral) {
+      const item = {id: Date.now(), ...novoItemAdquirido, quantidade: parseInt(novoItemAdquirido.quantidade)};
+      setItensAdquiridos([...itensAdquiridos, item]);
+      setNovoItemAdquirido({ item: "", quantidade: "", Fornecedor: "", precoUnitario: "", precoGeral: ""});
+    }
+  }
+
   const adicionarItem = () => {
-    if (novoItem.item && novoItem.quantidade && novoItem.departamento && novoItem.responsavel) {
+    if (novoItem.item && novoItem.quantidade && novoItem.departamento && novoItem.responsavel && novoItem.placa) {
       const item = { id: Date.now(), ...novoItem, quantidade: parseInt(novoItem.quantidade), data: new Date().toISOString().split("T")[0] };
       setItensDistribuidos([...itensDistribuidos, item]);
-      setNovoItem({ item: "", quantidade: "", departamento: "", responsavel: "" });
+      setNovoItem({ item: "", quantidade: "", departamento: "", responsavel: "", placa:"" });
+      
     }
   };
 
@@ -65,7 +79,8 @@ export default function Dashboard() {
           {[
             { id: "overview", label: "Visão Geral", icon: "📊" },
             { id: "pagamentos", label: "Pagamentos", icon: "💰" },
-            { id: "distribuicao", label: "Distribuição", icon: "📦" },
+            { id: "Entrada", label: "Entrada", icon: "📦" },
+            {id: "Saida", label: "Saida", icon: "📦"}
           ].map((tab) => (
             <button
               key={tab.id}
@@ -221,9 +236,84 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+        {/* Entrada Tab */}
+        {activeTab === "Entrada" && (
+          <div className={style.section}>
+            {/* Formulário de distribuição */}
+            <div className={style.section}>
+              <h3 className={style.sectionTitle}>Registrar Nova Entrada</h3>
+              <div className={style.formGrid}>
+                <input
+                  className={style.input}
+                  type="text"
+                  placeholder="Nome do item"
+                  value={novoItemAdquirido.item}
+                  onChange={(e) => setNovoItemAdquirido({ ...novoItemAdquirido, item: e.target.value })}
+                />
+                <input
+                  className={style.input}
+                  type="number"
+                  placeholder="Quantidade"
+                  value={novoItemAdquirido.quantidade}
+                  onChange={(e) => setNovoItemAdquirido({ ...novoItemAdquirido, quantidade: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Nome do fornecedor..."
+                  className={style.select}
+                  value={novoItemAdquirido.Fornecedor}
+                  onChange={(e) => setNovoItemAdquirido({ ...novoItemAdquirido, Fornecedor: e.target.value })}
+                />
+                <input
+                  className={style.input}
+                  type="number"
+                  placeholder="Preço Unitário:"
+                  value={novoItemAdquirido.precoUnitario}
+                  onChange={(e) => setNovoItemAdquirido({ ...novoItemAdquirido, precoUnitario: e.target.value })}
+                />
+                <input
+                  className={style.input}
+                  type="number"
+                  placeholder="Preço Geral:"
+                  value={novoItemAdquirido.precoGeral}
+                  onChange={(e) => setNovoItemAdquirido({ ...novoItemAdquirido, precoGeral: e.target.value })}
+                />
+              </div>
+              <button className={style.buttonGreen} onClick={adicionarItemAdquirido}>
+                Registrar Nova Entrada
+              </button>
+            </div>
+
+            {/* Lista de entradas */}
+            <div className={style.tableContainer} style={{ marginTop: "2rem" }}>
+              <table className={style.table}>
+                <thead className={style.thead}>
+                  <tr>
+                    <th className={style.th}>Item</th>
+                    <th className={style.th}>Quantidade</th>
+                    <th className={style.th}>Fornecedor</th>
+                    <th className={style.th}>Preço Unitário</th>
+                    <th className={style.th}>Preço Geral</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {itensAdquiridos.map((item) => (
+                    <tr key={item.id} className={style.trHover}>
+                      <td className={style.td}>{item.item}</td>
+                      <td className={style.td}>{item.quantidade}</td>
+                      <td className={style.td}>{item.Fornecedor}</td>
+                      <td className={style.td}>{"R$ " + item.precoUnitario}</td>
+                      <td className={style.td}>{"R$ " + item.precoGeral}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {/* Distribuição Tab */}
-        {activeTab === "distribuicao" && (
+        {activeTab === "Saida" && (
           <div className={style.section}>
             {/* Formulário de distribuição */}
             <div className={style.section}>
@@ -248,11 +338,11 @@ export default function Dashboard() {
                   value={novoItem.departamento}
                   onChange={(e) => setNovoItem({ ...novoItem, departamento: e.target.value })}
                 >
-                  <option value="">Selecione o departamento</option>
-                  <option value="Secretaria de Obras">Secretaria de Obras</option>
-                  <option value="Secretaria de Transporte">Secretaria de Transporte</option>
-                  <option value="Secretaria de Saúde">Secretaria de Saúde</option>
-                  <option value="Secretaria de Educação">Secretaria de Educação</option>
+                  <option value="">Selecione A Prefeitura</option>
+                  <option value="Secretaria de Obras">Prefeitura de Esperança</option>
+                  <option value="Secretaria de Transporte">Prefeitura de Santa Rosa</option>
+                  <option value="Secretaria de Saúde">Prefeitura de Boa vista</option>
+                  <option value="Secretaria de Educação">Prefeitura de Areia</option>
                 </select>
                 <input
                   className={style.input}
@@ -260,6 +350,13 @@ export default function Dashboard() {
                   placeholder="Responsável"
                   value={novoItem.responsavel}
                   onChange={(e) => setNovoItem({ ...novoItem, responsavel: e.target.value })}
+                />
+                <input
+                  className={style.input}
+                  type="text"
+                  placeholder="Placa"
+                  value={novoItem.placa}
+                  onChange={(e) => setNovoItem({ ...novoItem, placa: e.target.value })}
                 />
               </div>
               <button className={style.buttonGreen} onClick={adicionarItem}>
@@ -274,8 +371,9 @@ export default function Dashboard() {
                   <tr>
                     <th className={style.th}>Item</th>
                     <th className={style.th}>Quantidade</th>
-                    <th className={style.th}>Departamento</th>
+                    <th className={style.th}>Prefeitura</th>
                     <th className={style.th}>Responsável</th>
+                    <th className={style.th}>Placa</th>
                     <th className={style.th}>Data</th>
                   </tr>
                 </thead>
@@ -286,6 +384,7 @@ export default function Dashboard() {
                       <td className={style.td}>{item.quantidade}</td>
                       <td className={style.td}>{item.departamento}</td>
                       <td className={style.td}>{item.responsavel}</td>
+                      <td className={style.td}>{item.placa}</td>
                       <td className={style.td}>{new Date(item.data).toLocaleDateString("pt-BR")}</td>
                     </tr>
                   ))}
